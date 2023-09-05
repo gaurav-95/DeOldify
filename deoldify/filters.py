@@ -8,7 +8,7 @@ from fastai.vision.data import *
 from fastai import *
 import cv2
 from PIL import Image as PilImage
-from deoldify import device as device_settings
+from DeOldify.deoldify import device as device_settings
 import logging
 
 

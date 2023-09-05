@@ -10,9 +10,9 @@ import gc
 import requests
 from io import BytesIO
 import base64
-from IPython import display as ipythondisplay
-from IPython.display import HTML
-from IPython.display import Image as ipythonimage
+# from IPython import display as ipythondisplay
+# from IPython.display import HTML
+# from IPython.display import Image as ipythonimage
 import cv2
 import logging
 
@@ -437,7 +437,20 @@ def get_stable_video_colorizer(
 
 def get_image_colorizer(
     root_folder: Path = Path('./'), render_factor: int = 35, artistic: bool = True
+    
 ) -> ModelImageVisualizer:
+
+    # Get the absolute path of the current file
+    current_file_path = os.path.abspath(__file__)
+
+    # Get the directory containing the current file
+    current_directory = os.path.dirname(current_file_path)
+
+    # Get the parent directory (one level up)
+    root_folder = Path(os.path.dirname(current_directory))
+    
+    # print(root_folder)
+    
     if artistic:
         return get_artistic_image_colorizer(root_folder=root_folder, render_factor=render_factor)
     else:
@@ -447,7 +460,7 @@ def get_image_colorizer(
 def get_stable_image_colorizer(
     root_folder: Path = Path('./'),
     weights_name: str = 'ColorizeStable_gen',
-    results_dir='result_images',
+    results_dir='temp',
     render_factor: int = 35
 ) -> ModelImageVisualizer:
     learn = gen_inference_wide(root_folder=root_folder, weights_name=weights_name)
@@ -459,7 +472,7 @@ def get_stable_image_colorizer(
 def get_artistic_image_colorizer(
     root_folder: Path = Path('./'),
     weights_name: str = 'ColorizeArtistic_gen',
-    results_dir='result_images',
+    results_dir='temp',
     render_factor: int = 35
 ) -> ModelImageVisualizer:
     learn = gen_inference_deep(root_folder=root_folder, weights_name=weights_name)
@@ -468,20 +481,20 @@ def get_artistic_image_colorizer(
     return vis
 
 
-def show_image_in_notebook(image_path: Path):
-    ipythondisplay.display(ipythonimage(str(image_path)))
+# def show_image_in_notebook(image_path: Path):
+#     ipythondisplay.display(ipythonimage(str(image_path)))
 
 
-def show_video_in_notebook(video_path: Path):
-    video = io.open(video_path, 'r+b').read()
-    encoded = base64.b64encode(video)
-    ipythondisplay.display(
-        HTML(
-            data='''<video alt="test" autoplay 
-                loop controls style="height: 400px;">
-                <source src="data:video/mp4;base64,{0}" type="video/mp4" />
-             </video>'''.format(
-                encoded.decode('ascii')
-            )
-        )
-    )
+# def show_video_in_notebook(video_path: Path):
+#     video = io.open(video_path, 'r+b').read()
+#     encoded = base64.b64encode(video)
+#     ipythondisplay.display(
+#         HTML(
+#             data='''<video alt="test" autoplay 
+#                 loop controls style="height: 400px;">
+#                 <source src="data:video/mp4;base64,{0}" type="video/mp4" />
+#              </video>'''.format(
+#                 encoded.decode('ascii')
+#             )
+#         )
+#     )
